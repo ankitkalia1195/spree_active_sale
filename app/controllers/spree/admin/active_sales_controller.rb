@@ -49,8 +49,6 @@ module Spree
           return @collection if @collection.present?
           params[:q] ||= {}
           params[:q][:deleted_at_null] ||= "1"
-          
-          params[:q][:s] ||= "name asc"
 
           @search = super.ransack(params[:q])
 

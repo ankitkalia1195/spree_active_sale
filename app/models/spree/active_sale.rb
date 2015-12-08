@@ -3,17 +3,16 @@
 # For example: 'My Sale/Product name' sale, which can have many schedules in it.
 #
 module Spree
-  class ActiveSale < ActiveRecord::Base
-    has_many :active_sale_events, :conditions => { :deleted_at => nil }, :dependent => :destroy
+  class ActiveSale < Spree::Base
+    extend FriendlyId
+    has_many :active_sale_events, -> { where(:deleted_at => nil) }, :dependent => :destroy
 
-    attr_accessible :name, :permalink
+    acts_as_list
 
     validates :name, :permalink, :presence => true
-    validates :permalink, :uniqueness => true
-
-    default_scope :order => "#{self.table_name}.position"
-
-    make_permalink :order => :name
+    friendly_id :name, use: :slugged, slug_column: :permalink
+    validates :permalink, uniqueness: { allow_blank: true }
+    default_scope { order(position: :asc) }
 
     accepts_nested_attributes_for :active_sale_events, :allow_destroy => true, :reject_if => lambda { |attrs| attrs.all? { |k, v| v.blank? } }
 

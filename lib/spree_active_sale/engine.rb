@@ -1,17 +1,16 @@
 module SpreeActiveSale
   class Engine < Rails::Engine
-    require 'spree/core'
+    require 'spree_core'
+
     isolate_namespace Spree
     engine_name 'spree_active_sale'
 
     config.autoload_paths += %W(#{config.root}/lib)
 
-    initializer "spree_active_sale.environment", :before => "spree.environment" do |app|
+    # Doubt
+    initializer "spree_active_sale.environment", before: "spree.environment" do |app|
+      ActionController::Base.send(:helper, Spree::ActiveSaleEventsHelper)
       Spree::ActiveSaleConfig = Spree::ActiveSaleConfiguration.new
-      %w(ActionController::Base Spree::BaseController).each { |controller| 
-        controller.constantize.send(:helper, Spree::ActiveSaleEventsHelper)
-        controller.constantize.send(:helper, Spree::ActiveSalesHelper)
-      }
     end
 
     # use rspec for tests

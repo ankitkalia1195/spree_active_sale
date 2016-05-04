@@ -1,6 +1,6 @@
 Deface::Override.new(
-            :name => "active_sale_tab",
-            :virtual_path => "spree/layouts/admin",
-            :insert_bottom => "[data-hook='admin_tabs'], #admin_tabs[data-hook]",
-            :text => "<%= tab :active_sales, :icon => 'icon-th-list' %>"
+  virtual_path: 'spree/layouts/admin',
+  name: 'active_sale_admin_sidebar_menu',
+  insert_bottom: '#main-sidebar',
+  partial: 'spree/admin/shared/active_sale_sidebar_menu'
 )
